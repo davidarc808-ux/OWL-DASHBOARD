@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+    volumes:
+      - owl-db-data:/var/lib/postgresql/data
+
+  web:
+    image: odoo:19.0
+    depends_on:
+      - db
+    ports:
+      - "8072:8069"
+    volumes:
+      - owl-web-data:/var/lib/odoo
+      - ./extra-addons:/mnt/extra-addons
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    command: ["--dev=xml,reload", "--addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons"]
+
+volumes:
+  owl-web-data:
+  owl-db-data:

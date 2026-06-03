@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <t t-name="owl_tablero.OwlDashboard" owl="1">
+        <div class="owl_dashboard">
+
+            <div class="dashboard_header">
+                <h2>Tablero de Compras y Ventas</h2>
+            </div>
+
+            <div class="dashboard_metrics">
+                <div class="metric_card ventas">
+                    <span class="metric_label">Total Ventas</span>
+                    <span class="metric_value"><t t-esc="state.total_ventas"/></span>
+                </div>
+                <div class="metric_card compras">
+                    <span class="metric_label">Total Compras</span>
+                    <span class="metric_value"><t t-esc="state.total_compras"/></span>
+                </div>
+                <div class="metric_card ganancia">
+                    <span class="metric_label">Ganancia Neta</span>
+                    <span class="metric_value"><t t-esc="state.ganancia"/></span>
+                </div>
+            </div>
+
+            <div class="dashboard_section">
+                <h3>Registros de Ventas</h3>
+                <table class="dashboard_table">
+                    <thead>
+                        <tr>
+                            <th>Orden</th>
+                            <th>Cliente</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="state.registros_ventas" t-as="orden" t-key="orden.id">
+                            <tr>
+                                <td><t t-esc="orden.nombre"/></td>
+                                <td><t t-esc="orden.cliente"/></td>
+                                <td><t t-esc="orden.fecha"/></td>
+                                <td><t t-esc="orden.total"/></td>
+                                <td><t t-esc="orden.estado"/></td>
+                            </tr>
+                        </t>
+                        <t t-if="state.registros_ventas.length === 0">
+                            <tr><td colspan="5">Sin registros</td></tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="dashboard_section">
+                <h3>Registros de Compras</h3>
+                <table class="dashboard_table">
+                    <thead>
+                        <tr>
+                            <th>Orden</th>
+                            <th>Proveedor</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="state.registros_compras" t-as="orden" t-key="orden.id">
+                            <tr>
+                                <td><t t-esc="orden.nombre"/></td>
+                                <td><t t-esc="orden.proveedor"/></td>
+                                <td><t t-esc="orden.fecha"/></td>
+                                <td><t t-esc="orden.total"/></td>
+                                <td><t t-esc="orden.estado"/></td>
+                            </tr>
+                        </t>
+                        <t t-if="state.registros_compras.length === 0">
+                            <tr><td colspan="5">Sin registros</td></tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </t>
+</templates>

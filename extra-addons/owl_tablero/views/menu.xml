@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="menu_owl_dashboard_root"
+        name="Tablero OWL"
+        sequence="10"
+        web_icon="owl_dashboard,static/description/icon.png"
+    />
+
+    <menuitem
+        id="menu_owl_dashboard_main"
+        name="Compras y Ventas"
+        parent="menu_owl_dashboard_root"
+        action="owl_tablero.owl_dashboard_action"
+        sequence="1"
+    />
+    
+</odoo>
