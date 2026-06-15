@@ -5,25 +5,69 @@
 
             <div class="dashboard_header">
                 <h2>Tablero de Compras y Ventas</h2>
+                <span class="dashboard_subtitle">Resumen general de operaciones</span>
             </div>
 
-            <div class="dashboard_metrics">
-                <div class="metric_card ventas">
-                    <span class="metric_label">Total Ventas</span>
-                    <span class="metric_value"><t t-esc="state.total_ventas"/></span>
+            <div class="dashboard_tiles">
+
+                <div class="tile tile_ventas">
+                    <div class="tile_icon">🛒</div>
+                    <div class="tile_content">
+                        <span class="tile_label">Total Ventas</span>
+                        <span class="tile_amount">
+                            <t t-esc="formatMoney(state.total_ventas)"/>
+                        </span>
+                        <div class="tile_details">
+                            <span>📋 <t t-esc="state.num_ventas"/> órdenes</span>
+                            <span>📄 Última: <t t-esc="state.ultima_venta"/></span>
+                        </div>
+                    </div>
                 </div>
-                <div class="metric_card compras">
-                    <span class="metric_label">Total Compras</span>
-                    <span class="metric_value"><t t-esc="state.total_compras"/></span>
+
+                <div class="tile tile_compras">
+                    <div class="tile_icon">📦</div>
+                    <div class="tile_content">
+                        <span class="tile_label">Total Compras</span>
+                        <span class="tile_amount">
+                            <t t-esc="formatMoney(state.total_compras)"/>
+                        </span>
+                        <div class="tile_details">
+                            <span>📋 <t t-esc="state.num_compras"/> órdenes</span>
+                            <span>📄 Última: <t t-esc="state.ultima_compra"/></span>
+                        </div>
+                    </div>
                 </div>
-                <div class="metric_card ganancia">
-                    <span class="metric_label">Ganancia Neta</span>
-                    <span class="metric_value"><t t-esc="state.ganancia"/></span>
+
+                <div t-attf-class="tile tile_ganancia {{ state.estado_ganancia }}">
+                    <div class="tile_icon">
+                        <t t-if="state.estado_ganancia === 'positivo'">📈</t>
+                        <t t-else="">📉</t>
+                    </div>
+                    <div class="tile_content">
+                        <span class="tile_label">Ganancia Neta</span>
+                        <span class="tile_amount">
+                            <t t-esc="formatMoney(state.ganancia)"/>
+                        </span>
+                        <div class="tile_details">
+                            <span t-if="state.estado_ganancia === 'positivo'">
+                                ✅ Operación rentable
+                            </span>
+                            <span t-else="">
+                                ⚠️ Compras superan ventas
+                            </span>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
             <div class="dashboard_section">
-                <h3>Registros de Ventas</h3>
+                <div class="section_header">
+                    <h3>🛒 Registros de Ventas</h3>
+                    <span class="section_badge ventas_badge">
+                        <t t-esc="state.num_ventas"/> órdenes
+                    </span>
+                </div>
                 <table class="dashboard_table">
                     <thead>
                         <tr>
@@ -37,22 +81,35 @@
                     <tbody>
                         <t t-foreach="state.registros_ventas" t-as="orden" t-key="orden.id">
                             <tr>
-                                <td><t t-esc="orden.nombre"/></td>
+                                <td class="orden_nombre"><t t-esc="orden.nombre"/></td>
                                 <td><t t-esc="orden.cliente"/></td>
                                 <td><t t-esc="orden.fecha"/></td>
-                                <td><t t-esc="orden.total"/></td>
-                                <td><t t-esc="orden.estado"/></td>
+                                <td class="orden_total"><t t-esc="formatMoney(orden.total)"/></td>
+                                <td>
+                                    <span t-attf-class="estado_badge estado_{{ orden.estado }}">
+                                        <t t-esc="orden.estado"/>
+                                    </span>
+                                </td>
                             </tr>
                         </t>
                         <t t-if="state.registros_ventas.length === 0">
-                            <tr><td colspan="5">Sin registros</td></tr>
+                            <tr>
+                                <td colspan="5" class="sin_registros">
+                                    Sin registros de ventas
+                                </td>
+                            </tr>
                         </t>
                     </tbody>
                 </table>
             </div>
 
             <div class="dashboard_section">
-                <h3>Registros de Compras</h3>
+                <div class="section_header">
+                    <h3>📦 Registros de Compras</h3>
+                    <span class="section_badge compras_badge">
+                        <t t-esc="state.num_compras"/> órdenes
+                    </span>
+                </div>
                 <table class="dashboard_table">
                     <thead>
                         <tr>
@@ -66,15 +123,23 @@
                     <tbody>
                         <t t-foreach="state.registros_compras" t-as="orden" t-key="orden.id">
                             <tr>
-                                <td><t t-esc="orden.nombre"/></td>
+                                <td class="orden_nombre"><t t-esc="orden.nombre"/></td>
                                 <td><t t-esc="orden.proveedor"/></td>
                                 <td><t t-esc="orden.fecha"/></td>
-                                <td><t t-esc="orden.total"/></td>
-                                <td><t t-esc="orden.estado"/></td>
+                                <td class="orden_total"><t t-esc="formatMoney(orden.total)"/></td>
+                                <td>
+                                    <span t-attf-class="estado_badge estado_{{ orden.estado }}">
+                                        <t t-esc="orden.estado"/>
+                                    </span>
+                                </td>
                             </tr>
                         </t>
                         <t t-if="state.registros_compras.length === 0">
-                            <tr><td colspan="5">Sin registros</td></tr>
+                            <tr>
+                                <td colspan="5" class="sin_registros">
+                                    Sin registros de compras
+                                </td>
+                            </tr>
                         </t>
                     </tbody>
                 </table>

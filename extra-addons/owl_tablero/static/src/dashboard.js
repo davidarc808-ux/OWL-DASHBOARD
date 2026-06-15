@@ -12,8 +12,13 @@ class OwlDashboard extends Component {
 
         this.state = useState({
             total_ventas: 0,
+            num_ventas: 0,
+            ultima_venta: '',
             total_compras: 0,
+            num_compras: 0,
+            ultima_compra: '',
             ganancia: 0,
+            estado_ganancia: 'positivo',
             registros_ventas: [],
             registros_compras: [],
         });
@@ -32,10 +37,22 @@ class OwlDashboard extends Component {
         );
 
         this.state.total_ventas = datos.total_ventas;
+        this.state.num_ventas = datos.num_ventas;
+        this.state.ultima_venta = datos.ultima_venta;
         this.state.total_compras = datos.total_compras;
+        this.state.num_compras = datos.num_compras;
+        this.state.ultima_compra = datos.ultima_compra;
         this.state.ganancia = datos.ganancia;
+        this.state.estado_ganancia = datos.estado_ganancia;
         this.state.registros_ventas = datos.registros_ventas;
         this.state.registros_compras = datos.registros_compras;
+    }
+
+    formatMoney(amount) {
+        return new Intl.NumberFormat('es-MX', {
+            style: 'currency',
+            currency: 'MXN',
+        }).format(amount);
     }
 }
 

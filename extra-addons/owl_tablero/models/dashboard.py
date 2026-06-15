@@ -7,12 +7,13 @@ class OwlDashboard(models.TransientModel):
     @api.model
     def get_dashboard_data(self):
 
-        # --- VENTAS ---
         ventas = self.env['sale.order'].search([
             ('state', 'in', ['sale', 'done'])
         ])
 
         total_ventas = sum(orden.amount_total for orden in ventas)
+        num_ventas = len(ventas)
+        ultima_venta = ventas[0].name if ventas else 'Sin órdenes'
 
         registros_ventas = [{
             'id': orden.id,
@@ -23,12 +24,13 @@ class OwlDashboard(models.TransientModel):
             'estado': orden.state or '',
         } for orden in ventas]
 
-        # --- COMPRAS ---
         compras = self.env['purchase.order'].search([
             ('state', 'in', ['purchase', 'done'])
         ])
 
         total_compras = sum(orden.amount_total for orden in compras)
+        num_compras = len(compras)
+        ultima_compra = compras[0].name if compras else 'Sin órdenes'
 
         registros_compras = [{
             'id': orden.id,
@@ -39,11 +41,17 @@ class OwlDashboard(models.TransientModel):
             'estado': orden.state or '',
         } for orden in compras]
 
-        # --- RESULTADO ---
+        ganancia = total_ventas - total_compras
+
         return {
             'total_ventas': total_ventas,
+            'num_ventas': num_ventas,
+            'ultima_venta': ultima_venta,
             'total_compras': total_compras,
-            'ganancia': total_ventas - total_compras,
+            'num_compras': num_compras,
+            'ultima_compra': ultima_compra,
+            'ganancia': ganancia,
+            'estado_ganancia': 'positivo' if ganancia >= 0 else 'negativo',
             'registros_ventas': registros_ventas,
             'registros_compras': registros_compras,
         }
